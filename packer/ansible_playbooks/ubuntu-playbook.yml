@@ -1,0 +1,17 @@
+- name: Install Packages on Ubuntu
+  hosts: all
+  become: yes  # Use sudo to gain superuser privileges
+
+  tasks:
+    - name: Update APT package cache
+      apt:
+        update_cache: yes
+
+    - name: Install packages
+      apt:
+        name:
+          - nginx
+          - python3
+          - python3-pip
+        state: present  # Use 'present' to ensure the packages are installed
+

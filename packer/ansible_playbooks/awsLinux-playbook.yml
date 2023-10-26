@@ -1,0 +1,21 @@
+---
+- name: Install Packages on AWS Linux Instance
+  hosts: all
+  gather_facts: yes
+  become: yes
+
+  tasks:
+    - name: Update package cache
+      dnf:
+        name: '*'
+        state: latest
+      register: dnf_update
+
+    - name: Install packages
+      dnf:
+        name:
+          - python3
+          - nginx
+          - mariadb-server
+        state: present
+      when: dnf_update.changed

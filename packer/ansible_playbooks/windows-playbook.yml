@@ -1,0 +1,30 @@
+- name: Install Packages on Windows
+  hosts: all
+  become: yes  # Use sudo to gain superuser privileges
+
+  tasks:
+    - name: Run PowerShell Script
+      win_shell: |
+        Write-Host "Hello from PowerShell script"
+      register: powershell_output
+
+    - name: Display PowerShell Script Output
+      debug:
+        var: powershell_output.stdout
+
+    - name: Ensure Chocolatey is installed
+      win_chocolatey:
+          name: chocolatey
+          state: present
+      become: yes
+
+    - name: Install Packages with Chocolatey
+      win_chocolatey:
+        name: "{{ item }}"
+        state: present
+      become: yes
+      loop:
+        - adobereader
+        - googlechrome
+        - vlc
+      when: "'package1' in ansible_facts.ansible_local.chocolatey_software"
